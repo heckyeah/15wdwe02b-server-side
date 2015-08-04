@@ -28,8 +28,8 @@
           // Loop through each result and display inside a list item
           while( $row = $result->fetch_assoc() ) {
             echo '<li>';
-            echo '<a><img src="img/deals/'.$row['image'].'"></a>';
-            echo '<h3><a>'.$row['name'].'</a></h3>';
+            echo '<a href="index.php?page=deal&dealid='.$row['id'].'"><img src="img/deals/thumbnails/'.$row['image'].'"></a>';
+            echo '<h3><a href="index.php?page=deal&dealid='.$row['id'].'">'.$row['name'].'</a></h3>';
             echo '<p>'.$row['description'].'</p>';
             echo '</li>';
           }

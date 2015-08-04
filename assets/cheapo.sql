@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Jul 02, 2015 at 05:02 am
+-- Generation Time: Jul 28, 2015 at 04:04 am
 -- Server version: 5.6.20
 -- PHP Version: 5.5.15
 
@@ -33,7 +33,7 @@ CREATE TABLE IF NOT EXISTS `businesses` (
   `phone` varchar(15) NOT NULL,
   `website` varchar(50) NOT NULL,
   `description` varchar(2000) NOT NULL
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=3 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=4 ;
 
 --
 -- Dumping data for table `businesses`
@@ -41,7 +41,8 @@ CREATE TABLE IF NOT EXISTS `businesses` (
 
 INSERT INTO `businesses` (`id`, `name`, `logo`, `phone`, `website`, `description`) VALUES
 (1, 'The Warehouse', 'warehouse.jpg', '0800 1234567', 'warehouse.co.nz', 'Everyone get''s a bargain*'),
-(2, 'ACG Yoobee School of Design', 'logo.jpg', '1234567', 'yoobee.ac.nz', 'Learn stuff!');
+(2, 'ACG Yoobee School of Design', 'logo.jpg', '1234567', 'yoobee.ac.nz', 'Learn stuff!'),
+(3, 'Harvey Norman', 'logo.jpg', '0800 1234567', 'harveynorman.co.nz', 'lorem ipsum');
 
 -- --------------------------------------------------------
 
@@ -90,7 +91,7 @@ INSERT INTO `business_locations` (`id`, `business_id`, `location_id`) VALUES
 CREATE TABLE IF NOT EXISTS `categories` (
 `id` tinyint(3) unsigned NOT NULL,
   `category` varchar(23) NOT NULL
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=4 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=6 ;
 
 --
 -- Dumping data for table `categories`
@@ -98,7 +99,9 @@ CREATE TABLE IF NOT EXISTS `categories` (
 
 INSERT INTO `categories` (`id`, `category`) VALUES
 (3, 'Education'),
-(1, 'Hospitality and Tourism');
+(4, 'Food'),
+(1, 'Hospitality and Tourism'),
+(5, 'Wine');
 
 -- --------------------------------------------------------
 
@@ -137,15 +140,14 @@ CREATE TABLE IF NOT EXISTS `deals` (
   `description` varchar(2000) NOT NULL,
   `code` varchar(40) NOT NULL,
   `businessID` smallint(5) unsigned NOT NULL
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=3 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=2 ;
 
 --
 -- Dumping data for table `deals`
 --
 
 INSERT INTO `deals` (`id`, `name`, `original_price`, `discounted_price`, `image`, `start_date`, `end_date`, `description`, `code`, `businessID`) VALUES
-(1, 'Free stationary', '100.00', '0.00', 'image.jpg', '2015-07-02 02:40:11', '2015-08-05 12:00:00', 'Get free stationary!', 'freebee', 2),
-(2, 'Half price desk chairs', '50.00', '25.00', 'chair.jpg', '2015-07-02 02:42:08', '2015-08-13 04:20:39', 'Cheap chairs', 'ch3aps3ats', 1);
+(1, 'CHeap Pizza', '100.00', '50.00', '55b6c9842fb0c7.37829727553f1a5945b22_tandoori-pizza.jpg', '2015-07-28 00:14:13', '2015-12-31 23:00:00', 'Getting some cheap pizza is awesome!', '2345678', 1);
 
 -- --------------------------------------------------------
 
@@ -180,7 +182,7 @@ CREATE TABLE IF NOT EXISTS `pages` (
   `Title` varchar(60) NOT NULL,
   `Description` varchar(160) NOT NULL,
   `Name` varchar(20) NOT NULL
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=10 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=12 ;
 
 --
 -- Dumping data for table `pages`
@@ -194,7 +196,9 @@ INSERT INTO `pages` (`ID`, `Title`, `Description`, `Name`) VALUES
 (6, 'Cheap deals for Students - Registration', 'An account lets you access more advanced features of the website.', 'register'),
 (7, 'Cheap deals for Students - Your Account', 'Your account page', 'account'),
 (8, 'Cheap deals for Students - Log out', 'Goodbye :(', 'logout'),
-(9, 'Cheap deals for Students - Log In', 'Log into your account', 'login');
+(9, 'Cheap deals for Students - Log In', 'Log into your account', 'login'),
+(10, 'Cheap deals for Students - Deal', 'A single deal', 'deal'),
+(11, 'Cheap deals for Students - Search Results', 'Search results', 'search');
 
 -- --------------------------------------------------------
 
@@ -310,7 +314,6 @@ CREATE TABLE IF NOT EXISTS `users_additional_info` (
 --
 
 INSERT INTO `users_additional_info` (`ID`, `UserID`, `FirstName`, `LastName`, `ProfileImage`, `Bio`) VALUES
-(2, 1, 'Bat', 'Man', 'asdf.jpg', 'nananananannaanna'),
 (3, 2, 'Sponge', 'Bob', 'pineapple.png', 'hahahahahahahahaha');
 
 --
@@ -409,7 +412,7 @@ ALTER TABLE `users_additional_info`
 -- AUTO_INCREMENT for table `businesses`
 --
 ALTER TABLE `businesses`
-MODIFY `id` smallint(5) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=3;
+MODIFY `id` smallint(5) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=4;
 --
 -- AUTO_INCREMENT for table `business_categories`
 --
@@ -424,7 +427,7 @@ MODIFY `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=2;
 -- AUTO_INCREMENT for table `categories`
 --
 ALTER TABLE `categories`
-MODIFY `id` tinyint(3) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=4;
+MODIFY `id` tinyint(3) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=6;
 --
 -- AUTO_INCREMENT for table `cities_and_towns`
 --
@@ -434,7 +437,7 @@ MODIFY `id` tinyint(3) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=4;
 -- AUTO_INCREMENT for table `deals`
 --
 ALTER TABLE `deals`
-MODIFY `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=3;
+MODIFY `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=2;
 --
 -- AUTO_INCREMENT for table `locations`
 --
@@ -444,7 +447,7 @@ MODIFY `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=2;
 -- AUTO_INCREMENT for table `pages`
 --
 ALTER TABLE `pages`
-MODIFY `ID` tinyint(3) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=10;
+MODIFY `ID` tinyint(3) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=12;
 --
 -- AUTO_INCREMENT for table `postcodes`
 --

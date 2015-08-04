@@ -25,12 +25,33 @@ class AccountPage extends Page {
 	private $staffErrorMessage;
 	private $staffSuccessMessage;
 
+	private $newDealDateError;
+	private $totalErrors = 0;
+
+	private $dealImageError;
+
+	private $userFirstNameError;
+	private $userLastNameError;
+	private $userBioError;
+	private $userImageError;
+	private $userFirstName;
+	private $userLastName;
+	private $userBio;
+
+	private $userSuccess;
+	private $userFail;
+
 	public function __construct($model) {
 		parent::__construct($model);
 
 		// If the user has submitted the password change form
 		if( isset($_POST['existing-password']) ) {
 			$this->processPasswordChange();
+		}
+
+		// If the user is inserting / updating additional info
+		if( isset($_POST['user-data']) ) {
+			$this->processAdditionalInfo();
 		}
 
 		// If user is an admin
@@ -53,6 +74,9 @@ class AccountPage extends Page {
 
 			// If the add deal form has been submitted
 			if( isset($_POST['add-deal']) ) {
+				// echo '<pre>';
+				// print_r($_POST);
+				// die();
 				$this->processAddDeal();
 			}
 
@@ -246,11 +270,148 @@ class AccountPage extends Page {
 
 	private function processAddDeal() {
 
+		// Sticky forms
+
 		// Validation
 
+		// Make sure the start date is before the end date
+		$startDate 	= $_POST['start-year'].'-'.$_POST['start-month'].'-'.$_POST['start-day'];
+		$startDate .= ' '.$_POST['start-hour'].':'.$_POST['start-minute'].':'.$_POST['start-second'];
+
+		$endDate 	= $_POST['end-year'].'-'.$_POST['end-month'].'-'.$_POST['end-day'];
+		$endDate .= ' '.$_POST['end-hour'].':'.$_POST['end-minute'].':'.$_POST['end-second'];
+
+		if( new DateTime($startDate) > new DateTime($endDate) ) {
+			$this->newDealDateError = 'End date is before start date';
+			$this->totalErrors++;
+		} elseif( new DateTime() > new DateTime($endDate) ) {
+			$this->newDealDateError = 'End date is before today';
+			$this->totalErrors++;
+		}
+
+		// If a file has not been provided
+		if( $_FILES['image']['error'] == 4 ) {
+			$this->dealImageError = 'Image required!';
+			$this->totalErrors++;
+		} elseif( $this->totalErrors == 0 ) {
+
+			// Attempt to upload the file
+			require 'vendor/ImageUploader.php';
+
+			// Create an instance of the image uploader
+			$imageUploader = new ImageUploader();
+
+			// Attempt to upload the image
+			$uploadResult = $imageUploader->upload('image', 'img/deals/original/');
+
+			// If something went wrong
+			if( $uploadResult == false ) {
+				$this->dealImageError = $imageUploader->errorMessage;
+				$this->totalErrors++;
+			} else {
+
+				// Get the name of the file that was just uploaded
+				$imageName = $imageUploader->getImageName();
+				$_POST['newFileName'] = $imageName;
+
+				// Resize the image into a thumbnail
+				$imageUploader->resize('img/deals/original/'.$imageName, 628, 'img/deals/thumbnails/', $imageName);
+
+			}
+
+		}
+
+
 		// Add the deal
-		$this->model->addNewDeal();
+		if($this->totalErrors == 0) {
+			$this->model->addNewDeal();
+		}
 
 	}
+
+	private function processAdditionalInfo() {
+
+		// Validation
+		if( strlen($_POST['first-name']) < 2 ) {
+			$this->userFirstNameError = 'Needs to be at least 2 characters';
+			$this->totalErrors++;
+		} elseif( strlen($_POST['first-name']) > 20 ) {
+			$this->userFirstNameError = 'Needs to be at most 20 characters';
+			$this->totalErrors++;
+		} elseif( !preg_match('/^[a-zA-Z \-]{2,20}$/', $_POST['first-name']) ) {
+			$this->userFirstNameError = 'Can only use characters of the alphabet, spaces and hyphens';
+			$this->totalErrors++;
+		}
+
+		if( strlen($_POST['last-name']) < 2 ) {
+			$this->userLastNameError = 'Needs to be at least 2 characters';
+			$this->totalErrors++;
+		} elseif( strlen($_POST['last-name']) > 20 ) {
+			$this->userLastNameError = 'Needs to be at most 20 characters';
+			$this->totalErrors++;
+		} elseif( !preg_match('/^[a-zA-Z \-]{2,20}$/', $_POST['last-name']) ) {
+			$this->userLastNameError = 'Can only use characters of the alphabet, spaces and hyphens';
+			$this->totalErrors++;
+		}
+
+		if( strlen($_POST['bio']) > 2000 ) {
+			$this->userBioError = 'Cannot be more than 2000 characters';
+			$this->totalErrors++;
+		}
+
+		// Attempt to upload the image
+		if( $this->totalErrors == 0 && isset($_FILES['profile-image']) && $_FILES['profile-image']['name'] != '' ) {
+
+			// Require the image uploader
+			require 'vendor/ImageUploader.php';
+
+			// Create instance of the Image Uploader
+			$imageUploader = new ImageUploader();
+
+			// Attempt to upload the file
+			$result = $imageUploader->upload('profile-image', 'img/profile-images/original/');
+
+			// If the upload was a success
+			if( $result == true ) {
+
+				// Get the file name
+				$imageName = $imageUploader->getImageName();
+
+				// Prepare the variables
+				$fileLocation = "img/profile-images/original/$imageName";
+				$destination = "img/profile-images/avatar/";
+
+				// Make the avatar version
+				$imageUploader->resize($fileLocation, 320, $destination, $imageName);
+
+				// Make the icon version
+				$destination = "img/profile-images/icon/";
+				$imageUploader->resize($fileLocation, 32, $destination, $imageName);
+
+				$_POST['newUserImage'] = $imageName;
+			} else {
+				// Something went wrong
+				$this->totalErrors++;
+				$this->userImageError = $imageUploader->errorMessage;
+			}
+
+		} elseif( isset($_FILES['profile-image']) && $_FILES['profile-image']['name'] == '' ) {
+			$_POST['newUserImage'] = 'default.jpg';
+		}
+
+		if( $this->totalErrors == 0 ) {
+			$result = $this->model->additionalInfo();
+
+			// If the result was good
+			if( $result ) {
+				$this->userSuccess = 'Successfully changed your info';
+			} else {
+				$this->userFail = 'Info not updated';
+			}
+
+		}
+
+	}
+
 
 }

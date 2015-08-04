@@ -62,11 +62,15 @@ class RegistrationModel extends Model {
 		// Run the SQL
 		$this->dbc->query($sql);
 
+		// Get the ID of the brand new user
+		$userID = $this->dbc->insert_id;
+
 		// Validate the account creation
 
 		// Log user in by saving their details into the session
-		$_SESSION['username']  = $username;
-		$_SESSION['privilege'] = 'user';
+		$_SESSION['username']  	= $username;
+		$_SESSION['privilege'] 	= 'user';
+		$_SESSION['userID'] 	= $userID;
 
 	}
 

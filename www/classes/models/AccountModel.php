@@ -116,13 +116,11 @@ class AccountModel extends Model {
 	public function addNewDeal() {
 
 		// Filter the data
-		$dealName   = $this->dbc->real_escape_string($_POST['deal-name']);
+		$dealName   = $this->filter($_POST['deal-name']);
 		$businessID = $this->dbc->real_escape_string($_POST['business']);
 		$description= $this->dbc->real_escape_string($_POST['description']);
 
 		$startDay 	= $this->dbc->real_escape_string($_POST['start-day']);
-		$startMonth	= $this->dbc->real_escape_string($_POST['start-month']);
-		$startYear 	= $this->dbc->real_escape_string($_POST['start-year']);
 		$startHour 	= $this->dbc->real_escape_string($_POST['start-hour']);
 		$startMinute= $this->dbc->real_escape_string($_POST['start-minute']);
 		$startSecond= $this->dbc->real_escape_string($_POST['start-second']);
@@ -137,10 +135,13 @@ class AccountModel extends Model {
 		$originalPrice   = $this->dbc->real_escape_string($_POST['original-price']);
 		$discountedPrice = $this->dbc->real_escape_string($_POST['discounted-price']);
 		$couponCode 	 = $this->dbc->real_escape_string($_POST['coupon-code']);
-		//$image 	 		 = $this->dbc->real_escape_string($_FILES['image']);
+		$image 	 		 = $this->dbc->real_escape_string($_POST['newFileName']);
 		
 		// Prepare the dates and times
-		$startDate 	= "$startYear-$startMonth-$startDay $startHour:$startMinute:$startSecond";
+		$startDate 	= $this->filter($_POST['start-year'])
+					  .'-'
+					  .$this->filter($_POST['start-month'])
+					  ."-$startDay $startHour:$startMinute:$startSecond";
 		$endDate 	= "$endYear-$endMonth-$endDay $endHour:$endMinute:$endSecond";
 		
 		// Prepare the SQL
@@ -149,7 +150,7 @@ class AccountModel extends Model {
 							'$dealName',
 							$originalPrice,
 							$discountedPrice,
-							'image.jpg',
+							'$image',
 							'$startDate',
 							'$endDate',
 							'$description',
@@ -160,6 +161,69 @@ class AccountModel extends Model {
 		$this->dbc->query($sql);
 
 	}
+
+	public function getAllCategories() {
+
+		return $this->dbc->query("SELECT id, category FROM categories");
+
+	}
+
+	public function additionalInfo() {
+
+		// Get the userID
+		$userID = $_SESSION['userID'];
+
+		// Query to see if there is existing info in the database
+		$sql = "SELECT FirstName, LastName, ProfileImage, Bio
+				FROM users_additional_info
+				WHERE UserID = $userID";
+
+		// Run the SQL
+		$result = $this->dbc->query($sql);
+
+		// Filter the user data
+		$firstName 	= $this->filter($_POST['first-name']);
+		$lastName 	= $this->filter($_POST['last-name']);
+		$bio 		= $this->filter($_POST['bio']);
+		$image 		= $this->filter($_POST['newUserImage']);
+
+		// If there is a result then do an update
+		if( $result->num_rows == 1 ) {
+			// UPDATE
+			$sql = "UPDATE users_additional_info
+					SET FirstName = '$firstName',
+						LastName = '$lastName',
+						Bio = '$bio'
+					WHERE UserID = $userID";
+
+		} elseif( $result->num_rows == 0 ) {
+			// INSERT
+			$sql = "INSERT INTO users_additional_info
+					VALUES (NULL, $userID, '$firstName', '$lastName', '$image', '$bio')";
+		}
+
+		// Run the SQL
+		$this->dbc->query($sql);
+
+		// If the query failed
+		if( $this->dbc->affected_rows == 1 ) {
+			return true;
+		}
+
+		return false;
+
+	}
+
+	public function getAdditionalInfo() {
+		return $this->dbc->query("	SELECT FirstName, LastName, Bio
+									FROM users_additional_info
+									WHERE UserID = ".$_SESSION['userID']);
+	}
+
+
+
+
+
 
 
 

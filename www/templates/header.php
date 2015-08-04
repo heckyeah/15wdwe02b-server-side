@@ -26,7 +26,8 @@
           <li><a href="index.php?page=about">About Us</a></li>
           <li><a href="index.php?page=contact">Contact Us</a></li>
           <li class="show-for-large-up">
-            <form action="index.php?page=search" method="get">
+            <form action="index.php" method="get">
+              <input type="hidden" name="page" value="search">
               <div class="row collapse">
                 <div class="medium-8 columns">
                   <input type="search" name="query">

@@ -45,3 +45,70 @@
 		</form>
 	</div>
 </div>
+
+<?php
+	
+	// Get the users additional info if it exists
+	$result = $this->model->getAdditionalInfo();
+
+	// If there is a result
+	if( $result->num_rows == 1 ) {
+
+		// Extract the data
+		$data = $result->fetch_assoc();
+
+		$firstName 	= $data['FirstName'];
+		$lastName 	= $data['LastName'];
+		$bio 		= $data['Bio'];
+
+	} else {
+		$firstName 	= '';
+		$lastName 	= '';
+		$bio 		= '';
+	}
+
+	// If the user has submitted the form
+	// then we want to use the newer data instead
+	if( isset($_POST['user-data']) ) {
+		$firstName 	= $_POST['first-name'];
+		$lastName 	= $_POST['last-name'];
+		$bio 		= $_POST['bio'];
+	}
+
+?>
+
+<div class="row">
+	<div class="columns">
+		<form action="index.php?page=account" method="post" enctype="multipart/form-data">
+			<h2>Add / Update additional info</h2>
+			<label for="first-name">First Name: </label>
+			<input type="text" value="<?= $firstName; ?>" name="first-name" id="first-name" placeholder="Bruce">
+			<?php $this->foundationAlert($this->userFirstNameError, 'error'); ?>
+			<label for="last-name">Last Name: </label>
+			<input type="text" value="<?= $lastName; ?>" name="last-name" id="last-name" placeholder="Wayne">
+			<?php $this->foundationAlert($this->userLastNameError, 'error'); ?>
+			<label for="bio">About you: </label>
+			<textarea name="bio" id="bio" cols="30" rows="5"><?= $bio; ?></textarea>
+			<?php $this->foundationAlert($this->userBioError, 'error'); ?>
+			
+			<input type="hidden" name="MAX_FILE_SIZE" value="2000000">
+			<label for="profile-image">Profile Image: </label>
+			<input type="file" name="profile-image">
+
+			<input type="submit" name="user-data" value="Update!" class="button tiny">
+			<?php $this->foundationAlert($this->userSuccess, 'success'); ?>
+			<?php $this->foundationAlert($this->userFail, 'error'); ?>
+		</form>
+	</div>
+</div>
+
+
+
+
+
+
+
+
+
+
+

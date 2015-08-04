@@ -12,7 +12,7 @@ class LoginModel extends Model {
 		$username = $this->dbc->real_escape_string( $username );
 
 		// Prepare SQL to find a user and get the hashed password
-		$sql = "SELECT Password, Privilege FROM users WHERE Username = '$username'  ";
+		$sql = "SELECT ID, Password, Privilege FROM users WHERE Username = '$username'  ";
 
 		// Run the SQL
 		$result = $this->dbc->query( $sql );
@@ -34,6 +34,7 @@ class LoginModel extends Model {
 			// Credentials are correct
 			$_SESSION['username'] = $username;
 			$_SESSION['privilege'] = $data['Privilege'];
+			$_SESSION['userID'] = $data['ID'];
 
 			// Redirect the user
 			header('Location: index.php?page=account');

@@ -1,5 +1,7 @@
 <?php
 
+date_default_timezone_set("Pacific/Auckland");
+
 // Start the session
 session_start();
 
@@ -69,6 +71,24 @@ switch( $_GET['page'] ) {
 
 		$model = new LoginModel();
 		$page = new LoginPage( $model );
+	break;
+
+	case 'deal':
+		require 'classes/models/DealModel.php';
+		require 'classes/views/DealPage.php';
+
+		$model = new DealModel();
+		$page = new DealPage( $model );
+	break;
+
+	case 'search':
+
+		require 'classes/models/SearchModel.php';
+		require 'classes/views/SearchPage.php';
+
+		$model = new SearchModel();
+		$page = new SearchPage( $model );
+
 	break;
 
 	// 404
