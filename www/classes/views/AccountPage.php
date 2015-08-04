@@ -395,8 +395,6 @@ class AccountPage extends Page {
 				$this->userImageError = $imageUploader->errorMessage;
 			}
 
-		} elseif( isset($_FILES['profile-image']) && $_FILES['profile-image']['name'] == '' ) {
-			$_POST['newUserImage'] = 'default.jpg';
 		}
 
 		if( $this->totalErrors == 0 ) {
