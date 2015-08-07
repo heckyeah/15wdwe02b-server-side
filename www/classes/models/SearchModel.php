@@ -27,4 +27,31 @@ class SearchModel extends Model {
 
 	}
 
+	public function searchByCategory() {
+
+		// Filter the category ID
+		$categoryID = $this->filter($_GET['categoryid']);
+
+		// Prepare SQL
+		$sql = "SELECT 
+					name, description
+				FROM
+					deals
+				JOIN
+					deals_categories
+				ON
+					deals.id = Deal_ID
+				WHERE
+					Category_ID = $categoryID
+		";
+
+		// Run the query
+		$result = $this->dbc->query($sql);
+
+		return $result;
+
+
+
+	}
+
 }

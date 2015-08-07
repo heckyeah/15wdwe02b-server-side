@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Jul 28, 2015 at 04:04 am
+-- Generation Time: Aug 07, 2015 at 03:46 am
 -- Server version: 5.6.20
 -- PHP Version: 5.5.15
 
@@ -140,14 +140,39 @@ CREATE TABLE IF NOT EXISTS `deals` (
   `description` varchar(2000) NOT NULL,
   `code` varchar(40) NOT NULL,
   `businessID` smallint(5) unsigned NOT NULL
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=2 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=4 ;
 
 --
 -- Dumping data for table `deals`
 --
 
 INSERT INTO `deals` (`id`, `name`, `original_price`, `discounted_price`, `image`, `start_date`, `end_date`, `description`, `code`, `businessID`) VALUES
-(1, 'CHeap Pizza', '100.00', '50.00', '55b6c9842fb0c7.37829727553f1a5945b22_tandoori-pizza.jpg', '2015-07-28 00:14:13', '2015-12-31 23:00:00', 'Getting some cheap pizza is awesome!', '2345678', 1);
+(1, 'CHeap Pizza', '100.00', '50.00', '55b6c9842fb0c7.37829727553f1a5945b22_tandoori-pizza.jpg', '2015-07-28 00:14:13', '2015-12-31 23:00:00', 'Getting some cheap pizza is awesome!', '2345678', 1),
+(2, 'Free lfights', '1000.00', '0.00', '55c40345618904.48652398Jelly.fish.jpg', '2015-08-07 01:00:09', '2015-12-31 23:00:00', 'Free flights for Kiwis', 'freeflight', 2),
+(3, 'Vineyard Tour', '50.00', '10.00', '55c408aca7cfc0.67549085walt-childhood.jpg', '2015-08-07 01:23:01', '2015-12-31 23:00:00', 'Take a tour', 'winerun', 2);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `deals_categories`
+--
+
+CREATE TABLE IF NOT EXISTS `deals_categories` (
+`ID` int(10) unsigned NOT NULL,
+  `Deal_ID` mediumint(8) unsigned NOT NULL,
+  `Category_ID` tinyint(3) unsigned NOT NULL
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=6 ;
+
+--
+-- Dumping data for table `deals_categories`
+--
+
+INSERT INTO `deals_categories` (`ID`, `Deal_ID`, `Category_ID`) VALUES
+(1, 2, 3),
+(2, 2, 1),
+(3, 1, 3),
+(4, 1, 5),
+(5, 3, 5);
 
 -- --------------------------------------------------------
 
@@ -307,14 +332,14 @@ CREATE TABLE IF NOT EXISTS `users_additional_info` (
   `LastName` varchar(20) NOT NULL,
   `ProfileImage` varchar(100) NOT NULL,
   `Bio` varchar(2000) NOT NULL
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=4 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=7 ;
 
 --
 -- Dumping data for table `users_additional_info`
 --
 
 INSERT INTO `users_additional_info` (`ID`, `UserID`, `FirstName`, `LastName`, `ProfileImage`, `Bio`) VALUES
-(3, 2, 'Sponge', 'Bob', 'pineapple.png', 'hahahahahahahahaha');
+(6, 1, 'Ben', 'Abbott', '55c011e925fb10.60137562wallnut-log.png', 'asdfasdf');
 
 --
 -- Indexes for dumped tables
@@ -355,6 +380,12 @@ ALTER TABLE `cities_and_towns`
 --
 ALTER TABLE `deals`
  ADD PRIMARY KEY (`id`), ADD KEY `businessID` (`businessID`);
+
+--
+-- Indexes for table `deals_categories`
+--
+ALTER TABLE `deals_categories`
+ ADD PRIMARY KEY (`ID`), ADD KEY `Deal_ID` (`Deal_ID`), ADD KEY `Category_ID` (`Category_ID`);
 
 --
 -- Indexes for table `locations`
@@ -437,7 +468,12 @@ MODIFY `id` tinyint(3) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=4;
 -- AUTO_INCREMENT for table `deals`
 --
 ALTER TABLE `deals`
-MODIFY `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=2;
+MODIFY `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=4;
+--
+-- AUTO_INCREMENT for table `deals_categories`
+--
+ALTER TABLE `deals_categories`
+MODIFY `ID` int(10) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=6;
 --
 -- AUTO_INCREMENT for table `locations`
 --
@@ -477,7 +513,7 @@ MODIFY `ID` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=5;
 -- AUTO_INCREMENT for table `users_additional_info`
 --
 ALTER TABLE `users_additional_info`
-MODIFY `ID` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=4;
+MODIFY `ID` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=7;
 --
 -- Constraints for dumped tables
 --
@@ -501,6 +537,13 @@ ADD CONSTRAINT `business_locations_ibfk_2` FOREIGN KEY (`location_id`) REFERENCE
 --
 ALTER TABLE `deals`
 ADD CONSTRAINT `deals_ibfk_1` FOREIGN KEY (`businessID`) REFERENCES `businesses` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Constraints for table `deals_categories`
+--
+ALTER TABLE `deals_categories`
+ADD CONSTRAINT `deals_categories_ibfk_1` FOREIGN KEY (`Category_ID`) REFERENCES `categories` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+ADD CONSTRAINT `deals_categories_ibfk_2` FOREIGN KEY (`Deal_ID`) REFERENCES `deals` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Constraints for table `locations`

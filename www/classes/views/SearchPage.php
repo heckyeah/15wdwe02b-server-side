@@ -7,7 +7,13 @@ class SearchPage extends Page {
 	public function __construct($model) {
 		parent::__construct($model);
 
-		$this->searchResults = $this->model->search();
+		// If the user is searching for deals based on keywords
+		if( isset($_GET['query']) ) {
+			$this->searchResults = $this->model->search();
+		}elseif( isset($_GET['categoryid']) ) {
+			$this->searchResults = $this->model->searchByCategory();
+		}
+		
 
 	}
 

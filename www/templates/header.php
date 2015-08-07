@@ -23,6 +23,7 @@
       <section class="top-bar-section">
         <ul class="right">
           <li><a href="index.php?page=home">Home</a></li>
+          <li><a href="index.php?page=all-deals">All Deals</a></li>
           <li><a href="index.php?page=about">About Us</a></li>
           <li><a href="index.php?page=contact">Contact Us</a></li>
           <li class="show-for-large-up">

@@ -160,6 +160,26 @@ class AccountModel extends Model {
 
 		$this->dbc->query($sql);
 
+		// Get the ID of the brand new deal
+		// We will use this to associate tags
+		$dealID = $this->dbc->insert_id;
+
+		// Loop through each tag
+		foreach( $_POST['category'] as $tagID ) {
+
+			// Filter the ID just in case the user has tampered with it
+			$tagID = $this->filter($tagID);
+
+			// Prepare SQL
+			$sql = "INSERT INTO
+						deals_categories
+					VALUES (NULL, $dealID, $tagID)";
+
+			// Run the query
+			$this->dbc->query($sql);
+
+		}
+
 	}
 
 	public function getAllCategories() {

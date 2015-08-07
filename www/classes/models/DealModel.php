@@ -51,4 +51,34 @@ class DealModel extends Model {
 
 	}
 
+	public function getDealTags() {
+
+		// Filter the ID
+		$dealID = $this->filter($_GET['dealid']);
+
+		// Make sure the dealID is a number
+		if( !is_numeric($dealID) ) {
+			// ID is not a number. It has been tampered with
+			return false;
+		}
+
+		// Prepare SQL
+		$sql = "SELECT
+					category, categories.id
+				FROM 
+					categories
+				JOIN
+					deals_categories
+				ON
+					categories.id = Category_ID
+				WHERE
+					Deal_ID = $dealID";
+
+		// Run the query
+		$result = $this->dbc->query($sql);
+
+		return $result;
+
+	}
+
 }

@@ -91,6 +91,16 @@ switch( $_GET['page'] ) {
 
 	break;
 
+	case 'all-deals':
+
+		require 'classes/models/AllDealsModel.php';
+		require 'classes/views/AllDealsPage.php';
+
+		$model = new AllDealsModel();
+		$page = new AllDealsPage( $model );
+
+	break;
+
 	// 404
 	default:
 		require 'classes/models/Error404Model.php';
