@@ -5,6 +5,8 @@ date_default_timezone_set("Pacific/Auckland");
 // Start the session
 session_start();
 
+require '../config.php';
+
 // Determine what page the user wants
 $_GET['page'] = isset($_GET['page']) ? $_GET['page'] : 'home';
 

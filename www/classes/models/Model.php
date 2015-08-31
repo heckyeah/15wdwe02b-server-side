@@ -11,7 +11,7 @@ class Model {
 	public function __construct() {
 
 		// Connect to the database and save the connection in the property above
-		$this->dbc = new mysqli('localhost', 'root', '', 'cheapo');
+		$this->dbc = new mysqli('localhost', DB_USER, DB_PASS, DB_NAME);
 
 	}
 
