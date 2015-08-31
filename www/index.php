@@ -5,6 +5,11 @@ date_default_timezone_set("Pacific/Auckland");
 // Start the session
 session_start();
 
+// If the cart doesn't exist
+if( !isset($_SESSION['cart']) || isset($_GET['resetcart']) ) {
+	$_SESSION['cart'] = [];
+}
+
 require '../config.php';
 
 // Determine what page the user wants
@@ -100,6 +105,26 @@ switch( $_GET['page'] ) {
 
 		$model = new AllDealsModel();
 		$page = new AllDealsPage( $model );
+
+	break;
+
+	case 'cart':
+
+		require 'classes/models/CartModel.php';
+		require 'classes/views/CartPage.php';
+
+		$model = new CartModel();
+		$page = new CartPage( $model );
+
+	break;
+
+	case 'checkout':
+
+		require 'classes/models/CheckoutModel.php';
+		require 'classes/views/CheckoutPage.php';
+
+		$model = new CheckoutModel();
+		$page = new CheckoutPage( $model );
 
 	break;
 

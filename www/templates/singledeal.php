@@ -6,6 +6,14 @@
 		<h1><?= $this->dealInfo['deal_name']; ?></h1>
 		<p><?= $this->dealInfo['deal_description']; ?></p>
 	</div>
+
+	<div>
+		<form action="index.php?page=cart" method="post">
+			<input type="hidden" name="productID" value="<?= $_GET['dealid']; ?>">
+			<input type="submit" name="add-to-cart" class="tiny button" value="Add to cart" >
+		</form>
+	</div>
+
 	<div class="columns">
 		<h2>Tags</h2>
 		<ul>

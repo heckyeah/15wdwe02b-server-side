@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Aug 07, 2015 at 03:46 am
+-- Generation Time: Aug 31, 2015 at 05:28 am
 -- Server version: 5.6.20
 -- PHP Version: 5.5.15
 
@@ -140,7 +140,7 @@ CREATE TABLE IF NOT EXISTS `deals` (
   `description` varchar(2000) NOT NULL,
   `code` varchar(40) NOT NULL,
   `businessID` smallint(5) unsigned NOT NULL
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=4 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=5 ;
 
 --
 -- Dumping data for table `deals`
@@ -149,7 +149,8 @@ CREATE TABLE IF NOT EXISTS `deals` (
 INSERT INTO `deals` (`id`, `name`, `original_price`, `discounted_price`, `image`, `start_date`, `end_date`, `description`, `code`, `businessID`) VALUES
 (1, 'CHeap Pizza', '100.00', '50.00', '55b6c9842fb0c7.37829727553f1a5945b22_tandoori-pizza.jpg', '2015-07-28 00:14:13', '2015-12-31 23:00:00', 'Getting some cheap pizza is awesome!', '2345678', 1),
 (2, 'Free lfights', '1000.00', '0.00', '55c40345618904.48652398Jelly.fish.jpg', '2015-08-07 01:00:09', '2015-12-31 23:00:00', 'Free flights for Kiwis', 'freeflight', 2),
-(3, 'Vineyard Tour', '50.00', '10.00', '55c408aca7cfc0.67549085walt-childhood.jpg', '2015-08-07 01:23:01', '2015-12-31 23:00:00', 'Take a tour', 'winerun', 2);
+(3, 'Vineyard Tour', '50.00', '10.00', '55c408aca7cfc0.67549085walt-childhood.jpg', '2015-08-07 01:23:01', '2015-12-31 23:00:00', 'Take a tour', 'winerun', 2),
+(4, 'Cheap Pizza', '100.00', '20.00', '55e3a83a713c67.61809337Screen Shot 2015-06-26 at 9.25.16 am.png', '2015-08-31 01:02:37', '2015-12-31 23:00:00', 'This is a pizza', 'cheap101', 2);
 
 -- --------------------------------------------------------
 
@@ -161,7 +162,7 @@ CREATE TABLE IF NOT EXISTS `deals_categories` (
 `ID` int(10) unsigned NOT NULL,
   `Deal_ID` mediumint(8) unsigned NOT NULL,
   `Category_ID` tinyint(3) unsigned NOT NULL
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=6 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=7 ;
 
 --
 -- Dumping data for table `deals_categories`
@@ -172,7 +173,8 @@ INSERT INTO `deals_categories` (`ID`, `Deal_ID`, `Category_ID`) VALUES
 (2, 2, 1),
 (3, 1, 3),
 (4, 1, 5),
-(5, 3, 5);
+(5, 3, 5),
+(6, 4, 4);
 
 -- --------------------------------------------------------
 
@@ -195,6 +197,28 @@ CREATE TABLE IF NOT EXISTS `locations` (
 
 INSERT INTO `locations` (`id`, `street_number`, `street_name_id`, `suburb_id`, `city_town_id`, `postcode_id`) VALUES
 (1, '27', 1, 1, 2, 1);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `orders`
+--
+
+CREATE TABLE IF NOT EXISTS `orders` (
+`id` int(10) unsigned NOT NULL,
+  `status` enum('pending','approved','declined') NOT NULL,
+  `shipping_status` enum('pending','in-transit','delivered') NOT NULL,
+  `contact` text NOT NULL,
+  `order_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `order_completed` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=2 ;
+
+--
+-- Dumping data for table `orders`
+--
+
+INSERT INTO `orders` (`id`, `status`, `shipping_status`, `contact`, `order_date`, `order_completed`) VALUES
+(1, 'pending', 'pending', 'Bruce Wayne\n\n123 Cave Street,\r\nUnderground,\r\nBats', '2015-08-31 03:22:41', NULL);
 
 -- --------------------------------------------------------
 
@@ -394,6 +418,12 @@ ALTER TABLE `locations`
  ADD PRIMARY KEY (`id`), ADD KEY `street_name_id` (`street_name_id`), ADD KEY `suburb_id` (`suburb_id`), ADD KEY `city_town_id` (`city_town_id`), ADD KEY `postcode_id` (`postcode_id`);
 
 --
+-- Indexes for table `orders`
+--
+ALTER TABLE `orders`
+ ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `pages`
 --
 ALTER TABLE `pages`
@@ -468,17 +498,22 @@ MODIFY `id` tinyint(3) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=4;
 -- AUTO_INCREMENT for table `deals`
 --
 ALTER TABLE `deals`
-MODIFY `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=4;
+MODIFY `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=5;
 --
 -- AUTO_INCREMENT for table `deals_categories`
 --
 ALTER TABLE `deals_categories`
-MODIFY `ID` int(10) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=6;
+MODIFY `ID` int(10) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=7;
 --
 -- AUTO_INCREMENT for table `locations`
 --
 ALTER TABLE `locations`
 MODIFY `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=2;
+--
+-- AUTO_INCREMENT for table `orders`
+--
+ALTER TABLE `orders`
+MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=2;
 --
 -- AUTO_INCREMENT for table `pages`
 --

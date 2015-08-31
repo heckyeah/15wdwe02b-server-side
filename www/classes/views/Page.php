@@ -1,6 +1,6 @@
 <?php
 
-class Page {
+abstract class Page {
 
 	// Properties
 	public $title;
@@ -28,6 +28,8 @@ class Page {
 		include 'templates/footer.php';
 
 	}
+
+	abstract function contentHTML();
 
 	public function foundationAlert( $message, $type ) {
 		if( $message == '' ) { return; }
