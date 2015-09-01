@@ -26,7 +26,30 @@ class CheckoutModel extends Model {
 
 		// Capture the insert ID so we can reference it when they get back
 		$_SESSION['orderID'] = $this->dbc->insert_id;
+		$orderID = $_SESSION['orderID'];
 
+		// Make life easier
+		$cart = $_SESSION['cart'];
+
+		// Associate all the products with the order
+		foreach( $cart as $cartItem ) {
+
+			// Filter the data
+			$dealID = $this->filter( $cartItem['id'] );
+			$price = $this->filter( $cartItem['discounted-price'] );
+
+			// Prepare SQL
+			$sql = "INSERT INTO ordered_deals
+					VALUES (
+							NULL,
+							$dealID,
+							$orderID,
+							$price
+					)";
+
+			$this->dbc->query($sql);
+
+		}
 
 	}
 

@@ -11,6 +11,9 @@ class CartPage extends Page {
 			// Get the discounted price of this product
 			$productInfo = $this->model->getProductForCart( $_POST['productID'] );
 
+			// If the item is already in the cart
+			// ...
+
 			// Prepare new array of data to go into cart
 			$cartItem = [
 				'id'=>$_POST['productID'],
@@ -21,8 +24,10 @@ class CartPage extends Page {
 			// Add item to cart
 			$_SESSION['cart'][] = $cartItem;
 
+			//array_push($_SESSION['cart'], $cartItem);
+
 			// Redirect the user to the cart page so they can't resubmit the form
-			header('Location: index.php?page=cart'); 
+			header('Location: index.php?page=cart');
 
 		}
 
